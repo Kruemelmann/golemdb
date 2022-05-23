@@ -1,0 +1,14 @@
+syntax = "proto3";
+option go_package = "pkg/api/peers/peers;peers";
+
+service PeersService {
+  rpc Healthping(stream Ping) returns (stream Ping) {}
+}
+
+message GetRequest {
+  string key = 1;
+}
+
+message GetResponse {
+  string value = 1;
+}

@@ -1,0 +1,16 @@
+//syntax = "proto3";
+//option go_package = "pkg/api/pb/registry;registry";
+
+//service GolemService {
+  //rpc Get(GetRequest) returns (GetResponse) {}
+  ////rpc Put(PutRequest) returns (PutResponse) {}
+  ////rpc Delete(DeleteRequest) returns (DeleteResponse) {}
+//}
+
+//message GetRequest {
+  //string key = 1;
+//}
+
+//message GetResponse {
+  //string value = 1;
+//}
