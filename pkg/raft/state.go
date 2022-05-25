@@ -17,3 +17,18 @@ type states struct {
 	Candidate StateType
 	Leader    StateType
 }
+
+func (s StateType) String() string {
+	switch s {
+	case 1:
+		return "Follower"
+	case 2:
+		return "Candidate"
+	case 3:
+		return "Leader"
+
+	default:
+		return "Invalid State"
+	}
+
+}

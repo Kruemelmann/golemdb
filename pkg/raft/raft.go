@@ -1,14 +1,72 @@
 package raft
 
+import (
+	"log"
+	"math/rand"
+	"sync"
+	"time"
+
+	"github.com/google/uuid"
+)
+
 func NewConsensusModule() *ConsensusModule {
-	return &ConsensusModule{
-		State: State.Follower,
-	}
+	c := ConsensusModule{}
+	c.state = State.Follower
+	c.ID = uuid.New().String()
+
+	go func() {
+		c.mutex.Lock()
+		c.lastElectionReset = time.Now()
+		c.mutex.Unlock()
+		c.startElectionTimer()
+	}()
+
+	return &c
 }
 
 type ConsensusModule struct {
-	State StateType
+	ID    string
+	mutex sync.Mutex
+	state StateType
+
+	//election
+	lastElectionReset time.Time
+	votedId           string
 }
 
 func (c *ConsensusModule) RequestVotes()  {}
 func (c *ConsensusModule) AppendEntries() {}
+
+func (c *ConsensusModule) startElectionTimer() {
+	timeout := time.Duration(400+rand.Intn(100)) * time.Millisecond
+
+	log.Println("election timer started at %v", timeout)
+
+	ticker := time.NewTicker(100 * time.Millisecond)
+	defer ticker.Stop()
+
+	for {
+		<-ticker.C
+
+		c.mutex.Lock()
+		if c.state != State.Follower && c.state != State.Candidate {
+			log.Printf("stop election timer on state %s\n", c.state.String())
+			c.mutex.Unlock()
+			return
+		}
+
+		if d := time.Since(c.lastElectionReset); d >= timeout {
+			c.startElection()
+			c.mutex.Unlock()
+			return
+		}
+		c.mutex.Unlock()
+	}
+}
+
+func (c *ConsensusModule) startElection() {
+	c.state = State.Candidate
+	c.lastElectionReset = time.Now()
+	c.votedId = c.ID
+	log.Printf("[%s] started election on state %s\n", c.ID, c.state.String())
+}
