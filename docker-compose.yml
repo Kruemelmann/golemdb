@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-  fisherdb:
+  golemdb:
     build:
       context: .
       dockerfile: ./ci/docker/golemdb/prod/Dockerfile
