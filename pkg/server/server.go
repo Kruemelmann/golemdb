@@ -1,18 +1,21 @@
 package server
 
-import "sync"
+import (
+	"sync"
 
-var (
-	instance *GolemServer
-	once     sync.Once
+	pb "github.com/kruemelmann/golemdb/pkg/api/pb/peers"
 )
 
-type GolemServer struct {
-}
+var instance *PeersService
+var once sync.Once
 
-func NewGolemServer() *GolemServer {
+func NewPeersServer() *PeersService {
 	once.Do(func() {
-		instance = &GolemServer{}
+		serverInstance = &PeersService{}
 	})
 	return instance
+}
+
+type PeersService struct {
+	pb.UnimplementedPeersServiceServer
 }

@@ -11,6 +11,7 @@ import (
 
 func NewConsensusModule() *ConsensusModule {
 	c := ConsensusModule{}
+	c.localTerm = 1
 	c.state = State.Follower
 	c.ID = uuid.New().String()
 
@@ -29,6 +30,7 @@ type ConsensusModule struct {
 	mutex sync.Mutex
 	state StateType
 
+	localTerm int
 	//election
 	lastElectionReset time.Time
 	votedId           string
@@ -39,9 +41,8 @@ func (c *ConsensusModule) AppendEntries() {}
 
 func (c *ConsensusModule) startElectionTimer() {
 	timeout := time.Duration(400+rand.Intn(100)) * time.Millisecond
-
-	log.Println("election timer started at %v", timeout)
-
+	startterm := c.localTerm
+	log.Println("election timer started at %v term: %d", timeout, startterm)
 	ticker := time.NewTicker(100 * time.Millisecond)
 	defer ticker.Stop()
 
