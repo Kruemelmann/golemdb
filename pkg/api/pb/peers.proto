@@ -1,14 +1,19 @@
 syntax = "proto3";
-option go_package = "pkg/api/peers/peers;peers";
+option go_package = "pkg/api/pb/peers;peers";
 
 service PeersService {
-  rpc Healthping(stream Ping) returns (stream Ping) {}
+  rpc RequestVotes(RequestVotesRequest) returns (RequestVotesResponse) {}
+  rpc AppendEntries(AppendEntriesRequest) returns (AppendEntriesResponse) {}
+}
+//rpc Healthping(stream Ping) returns (stream Ping) {}
+//message Ping {string ID = 1;}
+
+message RequestVotesRequest {
+  string ID = 1;
+}
+message RequestVotesResponse {
+  bool voted = 1;
 }
 
-message GetRequest {
-  string key = 1;
-}
-
-message GetResponse {
-  string value = 1;
-}
+message AppendEntriesRequest {}
+message AppendEntriesResponse {}
