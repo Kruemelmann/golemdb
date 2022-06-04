@@ -40,9 +40,10 @@ func (c *ConsensusModule) RequestVotes()  {}
 func (c *ConsensusModule) AppendEntries() {}
 
 func (c *ConsensusModule) startElectionTimer() {
+	rand.Seed(time.Now().UnixNano())
 	timeout := time.Duration(400+rand.Intn(100)) * time.Millisecond
 	startterm := c.localTerm
-	log.Println("election timer started at %v term: %d", timeout, startterm)
+	log.Printf("election timer started at %v term: %d", timeout, startterm)
 	ticker := time.NewTicker(100 * time.Millisecond)
 	defer ticker.Stop()
 
