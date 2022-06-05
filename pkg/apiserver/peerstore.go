@@ -2,7 +2,6 @@ package apiserver
 
 import (
 	"errors"
-	"log"
 	"sync"
 )
 
@@ -34,11 +33,11 @@ func (p *PeerStore) Add(id, route string) error {
 	// check if already in peerstore
 	_, err := p.findIndexById(id)
 	if err == nil {
-		log.Fatalf("Peer with id: [%s] is already in store", id)
+		return errors.New("Peer with id: [" + id + "] is already in store")
 	}
 	_, err = p.findIndexByRoute(route)
 	if err == nil {
-		log.Fatalf("Peer with route: %s is already in store", route)
+		return errors.New("Peer with route: " + route + " is already in store")
 	}
 
 	// append to store
@@ -54,7 +53,17 @@ func (p *PeerStore) Remove(id string) error {
 	p.mutex.Lock()
 	defer p.mutex.Unlock()
 
+	index, err := p.findIndexById(id)
+	if err != nil {
+		return errors.New("Peer with id: [" + id + "] could not be found in store")
+	}
+
+	p.registeredPeers = append(p.registeredPeers[:index], p.registeredPeers[index+1:]...)
 	return nil
+}
+
+func (p *PeerStore) GetAll() ([]Peer, error) {
+	return p.registeredPeers, nil
 }
 
 func (p *PeerStore) GetById(id string) (*Peer, error) {

@@ -31,4 +31,16 @@ func TestNewPeerStore(t *testing.T) {
 			t.Errorf("Failed with wrong id")
 		}
 	})
+	t.Run("remove a peer from the store", func(t *testing.T) {
+		testinstance.Add("345", "127.0.0.1:9092")
+
+		err := testinstance.Remove("345")
+		if err != nil {
+			t.Errorf("Error while removing %s", err)
+		}
+		err = testinstance.Remove("345")
+		if err == nil {
+			t.Errorf("Error removing should not work twice err: %s", err)
+		}
+	})
 }
