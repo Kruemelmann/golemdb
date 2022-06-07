@@ -23,5 +23,5 @@ func newServer() *PeerServer {
 
 type PeerServer struct {
 	pb.UnimplementedPeersServiceServer
-	PeerStore []int
+	PeerStore PeerStore
 }

@@ -16,7 +16,6 @@ func NewApiServer() *ApiServer {
 }
 
 func (a *ApiServer) Start() {
-
 	//apiaddress := viper.GetString("registry.host") + ":" + viper.GetString("registry.port")
 	//binding ports
 	lis, err := net.Listen("tcp", "127.0.0.1:9090")

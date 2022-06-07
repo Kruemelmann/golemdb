@@ -5,26 +5,21 @@ import (
 	"sync"
 )
 
-var peerstoreInstance *PeerStore
-var peerstoreOnce sync.Once
-
-func newPeerStore() *PeerStore {
-	once.Do(func() {
-		peerstoreInstance = &PeerStore{
-			registeredPeers: []Peer{},
-			mutex:           sync.Mutex{},
-		}
-	})
-	return peerstoreInstance
-}
-
 type Peer struct {
 	Id    string
 	Route string
 }
+
 type PeerStore struct {
 	registeredPeers []Peer
 	mutex           sync.Mutex
+}
+
+func newPeerStore() *PeerStore {
+	return &PeerStore{
+		registeredPeers: []Peer{},
+		mutex:           sync.Mutex{},
+	}
 }
 
 func (p *PeerStore) Add(id, route string) error {
