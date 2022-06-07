@@ -1,18 +1,18 @@
-package apiserver_test
+package peerstore_test
 
 import (
 	"sync"
 	"testing"
 
-	"github.com/kruemelmann/golemdb/pkg/apiserver"
+	"github.com/kruemelmann/golemdb/pkg/apiserver/peerstore"
 )
 
-var testinstance *apiserver.PeerStore
+var testinstance *peerstore.PeerStore
 var once sync.Once
 
 func init() {
 	once.Do(func() {
-		testinstance = &apiserver.PeerStore{}
+		testinstance = &peerstore.PeerStore{}
 	})
 	testinstance.Add("123", "127.0.0.1:9090")
 }

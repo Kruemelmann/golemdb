@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/kruemelmann/golemdb/pkg/apiserver"
+	"github.com/kruemelmann/golemdb/pkg/peerserver"
 	"github.com/kruemelmann/golemdb/pkg/raft"
 )
 
@@ -14,6 +14,6 @@ func main() {
 	raft.NewConsensusModule()
 
 	//FIXME on this point init the grpc server
-	srv := apiserver.NewApiServer()
+	srv := peerserver.NewApiServer()
 	srv.Start()
 }

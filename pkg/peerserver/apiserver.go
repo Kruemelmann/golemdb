@@ -1,13 +1,17 @@
-package apiserver
+package peerserver
 
 import (
 	"log"
 	"net"
 
+	pb "github.com/kruemelmann/golemdb/pkg/api/pb/peers"
+	"github.com/kruemelmann/golemdb/pkg/peerserver/peerstore"
 	"google.golang.org/grpc"
 )
 
 type ApiServer struct {
+	pb.UnimplementedPeersServiceServer
+	PeerStore peerstore.PeerStore
 }
 
 func NewApiServer() *ApiServer {
@@ -23,7 +27,8 @@ func (a *ApiServer) Start() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
+	log.Printf("Starting grpc service for peers\n")
 	grpcserver := grpc.NewServer()
-	NewPeerServer(grpcserver)
+	pb.RegisterPeersServiceServer(grpcserver, &ApiServer{})
 	grpcserver.Serve(lis)
 }
