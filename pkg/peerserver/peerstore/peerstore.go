@@ -15,7 +15,7 @@ type PeerStore struct {
 	mutex           sync.Mutex
 }
 
-func newPeerStore() *PeerStore {
+func NewPeerStore() *PeerStore {
 	return &PeerStore{
 		registeredPeers: []Peer{},
 		mutex:           sync.Mutex{},

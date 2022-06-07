@@ -14,6 +14,6 @@ func main() {
 	raft.NewConsensusModule()
 
 	//FIXME on this point init the grpc server
-	srv := peerserver.NewApiServer()
+	srv := peerserver.NewPeerServer()
 	srv.Start()
 }
