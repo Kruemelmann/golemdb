@@ -63,6 +63,11 @@ func (a *PeerServer) ListPeerIds() ([]string, error) {
 	return ids, nil
 }
 
-func (a *PeerServer) Call(id) error {
-	return nil
+type RequestVoteArgs struct {
+}
+type RequestVoteReply struct {
+}
+
+func (a *PeerServer) RequestVote(id string, args RequestVoteArgs) (*RequestVoteReply, error) {
+	return nil, nil
 }

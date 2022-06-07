@@ -36,9 +36,6 @@ type ConsensusModule struct {
 	votedId           string
 }
 
-func (c *ConsensusModule) RequestVotes()  {}
-func (c *ConsensusModule) AppendEntries() {}
-
 func (c *ConsensusModule) startElectionTimer() {
 	rand.Seed(time.Now().UnixNano())
 	timeout := time.Duration(400+rand.Intn(100)) * time.Millisecond
