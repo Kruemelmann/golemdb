@@ -72,7 +72,9 @@ func (c *ConsensusModule) startElectionTimer() {
 
 func (c *ConsensusModule) startElection() {
 	c.state = State.Candidate
+	c.currentTerm++
+	savedCurrentTerm := c.currentTerm
 	c.lastElectionReset = time.Now()
 	c.votedId = c.ID
-	log.Printf("[%s] started election on state %s\n", c.ID, c.state.String())
+	log.Printf("[%s] started election on state %s with term %d\n", c.ID, c.state.String(), savedCurrentTerm)
 }

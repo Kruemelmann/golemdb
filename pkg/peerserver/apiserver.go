@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc"
 )
 
-var peerserverInstance *PeerStore
+var peerserverInstance *PeerServer
 var once sync.Once
 
 type PeerServer struct {
