@@ -72,7 +72,11 @@ type RequestVoteReply struct {
 	VoteGranted bool
 }
 
-//TODO
-func (a *PeerServer) RequestVote(id string, args RequestVoteArgs) (*RequestVoteReply, error) {
-	return nil, nil
+//TODO this is only debugging
+func (a *PeerServer) RequestVote(id string, args RequestVoteArgs) (RequestVoteReply, error) {
+	reply := RequestVoteReply{
+		Term:        0,
+		VoteGranted: true,
+	}
+	return reply, nil
 }

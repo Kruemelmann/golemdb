@@ -84,11 +84,12 @@ func (c *ConsensusModule) startElection() {
 	ids, _ := peerserver.NewPeerServer().ListPeerIds()
 	for _, id := range ids {
 		go func(ID string) {
-			args := RequestVoteArgs{
+			args := peerserver.RequestVoteArgs{
 				Term:        savedCurrentTerm,
 				CandidateId: c.ID,
 			}
 
+			log.Printf("HERE id=%v\n", ID)
 			reply, err := peerserver.NewPeerServer().RequestVote(ID, args)
 			if err == nil {
 				c.mutex.Lock()
@@ -102,7 +103,7 @@ func (c *ConsensusModule) startElection() {
 
 				if reply.Term > savedCurrentTerm {
 					log.Printf("term out of date in RequestVoteReply\n")
-					c.state = State.Follower
+					c.becomeFollower(reply.Term)
 					return
 				} else if reply.Term == savedCurrentTerm {
 					if reply.VoteGranted {
@@ -120,5 +121,34 @@ func (c *ConsensusModule) startElection() {
 	}
 	go c.startElectionTimer()
 }
+
 func (c *ConsensusModule) startLeader() {
+	c.state = State.Leader
+	log.Printf("becomes Leader; term=%d", c.currentTerm)
+	go func() {
+		ticker := time.NewTicker(50 * time.Millisecond)
+		defer ticker.Stop()
+		for {
+			c.leaderSendHeartbeats()
+			<-ticker.C
+
+			c.mutex.Lock()
+			if c.state != State.Leader {
+				c.mutex.Unlock()
+				return
+			}
+			c.mutex.Unlock()
+		}
+	}()
+}
+func (c *ConsensusModule) leaderSendHeartbeats() {
+}
+func (c *ConsensusModule) becomeFollower(term int) {
+	log.Printf("becomes Leader; term=%d", c.currentTerm)
+	c.state = State.Follower
+	c.currentTerm = term
+	c.votedId = "-1"
+	c.lastElectionReset = time.Now()
+
+	go c.startElectionTimer()
 }
