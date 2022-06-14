@@ -1,0 +1,13 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "peerserver",
+    srcs = ["peerserver.go"],
+    importpath = "github.com/kruemelmann/golemdb/pkg/peerserver",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/api/pb/peers",
+        "//pkg/peerserver/peerstore",
+        "@org_golang_google_grpc//:go_default_library",
+    ],
+)

@@ -4,7 +4,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/kruemelmann/golemdb/pkg/apiserver/peerstore"
+	"github.com/kruemelmann/golemdb/pkg/peerserver/peerstore"
 )
 
 var testinstance *peerstore.PeerStore

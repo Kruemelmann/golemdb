@@ -1,0 +1,11 @@
+apiVersion: skaffold/v2beta28
+kind: Config
+build:
+  artifacts:
+  - image: golemdb-bazel
+    bazel:
+      target: //:golemdb.tar
+deploy:
+  kubectl:
+    manifests:
+    - deploy/k8s/k8s-pod.yaml

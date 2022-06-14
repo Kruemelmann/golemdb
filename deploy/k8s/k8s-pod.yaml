@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: golemdb
+spec:
+  containers:
+  - name: golemdb
+    image: golemdb-bazel
+    command: ["/crosslinux_golemdb"]

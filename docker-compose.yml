@@ -4,5 +4,6 @@ services:
   golemdb:
     build:
       context: .
-      dockerfile: ./ci/docker/golemdb/prod/Dockerfile
+      dockerfile: ./deploy/docker/golemdb/dev/Dockerfile
+    command: "tail -f /dev/null"
 

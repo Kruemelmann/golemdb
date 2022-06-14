@@ -1,0 +1,27 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "golemdb_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/kruemelmann/golemdb/cmd/golemdb",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//pkg/peerserver",
+        "//pkg/raft",
+    ],
+)
+
+go_binary(
+    name = "golemdb",
+    embed = [":golemdb_lib"],
+    visibility = ["//visibility:public"],
+)
+
+go_binary(
+    name = "crosslinux_golemdb",
+    embed = [":golemdb_lib"],
+    goarch = "amd64",
+    goos = "linux",
+    visibility = ["//visibility:public"],
+)
+

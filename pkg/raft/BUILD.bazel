@@ -1,0 +1,15 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "raft",
+    srcs = [
+        "raft.go",
+        "state.go",
+    ],
+    importpath = "github.com/kruemelmann/golemdb/pkg/raft",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/peerserver",
+        "@com_github_google_uuid//:uuid",
+    ],
+)

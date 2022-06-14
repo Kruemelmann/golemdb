@@ -1,0 +1,14 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "peerstore",
+    srcs = ["peerstore.go"],
+    importpath = "github.com/kruemelmann/golemdb/pkg/peerserver/peerstore",
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "peerstore_test",
+    srcs = ["peerstore_test.go"],
+    deps = [":peerstore"],
+)
