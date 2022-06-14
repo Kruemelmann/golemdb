@@ -29,6 +29,11 @@ func NewPeerServer() *PeerServer {
 	return peerserverInstance
 }
 
+func (a *PeerServer) InitialRegisterPeers() {
+	//FIXME remove debugging peers and read them from env or config file
+	a.PeerStore.Add("123", "127.0.0.1:9091")
+}
+
 func (a *PeerServer) Start() {
 	//apiaddress := viper.GetString("registry.host") + ":" + viper.GetString("registry.port")
 	//binding ports
@@ -41,11 +46,6 @@ func (a *PeerServer) Start() {
 	grpcserver := grpc.NewServer()
 	pb.RegisterPeersServiceServer(grpcserver, &PeerServer{})
 	grpcserver.Serve(lis)
-}
-
-func (a *PeerServer) InitialRegisterPeers() {
-	//FIXME remove debugging peers and read them from env or config file
-	a.PeerStore.Add("123", "127.0.0.1:9091")
 }
 
 func (a *PeerServer) ListPeerIds() ([]string, error) {
@@ -64,10 +64,15 @@ func (a *PeerServer) ListPeerIds() ([]string, error) {
 }
 
 type RequestVoteArgs struct {
+	Term        int
+	CandidateId string
 }
 type RequestVoteReply struct {
+	Term        int
+	VoteGranted bool
 }
 
+//TODO
 func (a *PeerServer) RequestVote(id string, args RequestVoteArgs) (*RequestVoteReply, error) {
 	return nil, nil
 }

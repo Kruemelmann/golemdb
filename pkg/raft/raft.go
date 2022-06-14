@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/kruemelmann/golemdb/pkg/peerserver"
 )
 
 func NewConsensusModule() *ConsensusModule {
@@ -77,4 +78,47 @@ func (c *ConsensusModule) startElection() {
 	c.lastElectionReset = time.Now()
 	c.votedId = c.ID
 	log.Printf("[%s] started election on state %s with term %d\n", c.ID, c.state.String(), savedCurrentTerm)
+	votesReceived := 1
+
+	//TODO handle error
+	ids, _ := peerserver.NewPeerServer().ListPeerIds()
+	for _, id := range ids {
+		go func(ID string) {
+			args := RequestVoteArgs{
+				Term:        savedCurrentTerm,
+				CandidateId: c.ID,
+			}
+
+			reply, err := peerserver.NewPeerServer().RequestVote(ID, args)
+			if err == nil {
+				c.mutex.Lock()
+				defer c.mutex.Unlock()
+				log.Printf("received RequestVoteReply term=%v bool=%v\n", reply.Term, reply.VoteGranted)
+
+				if c.state == State.Candidate {
+					log.Printf("while waiting for reply, state = %v\n", c.state.String())
+					return
+				}
+
+				if reply.Term > savedCurrentTerm {
+					log.Printf("term out of date in RequestVoteReply\n")
+					c.state = State.Follower
+					return
+				} else if reply.Term == savedCurrentTerm {
+					if reply.VoteGranted {
+						votesReceived++
+						if votesReceived*2 > len(ids)+1 {
+							// Won the election!
+							log.Printf("wins election with %d votes\n", votesReceived)
+							c.startLeader()
+							return
+						}
+					}
+				}
+			}
+		}(id)
+	}
+	go c.startElectionTimer()
+}
+func (c *ConsensusModule) startLeader() {
 }
