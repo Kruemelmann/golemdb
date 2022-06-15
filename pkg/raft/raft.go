@@ -142,6 +142,7 @@ func (c *ConsensusModule) startLeader() {
 	}()
 }
 func (c *ConsensusModule) leaderSendHeartbeats() {
+	log.Printf("send Heardbeat\n")
 }
 func (c *ConsensusModule) becomeFollower(term int) {
 	log.Printf("becomes Leader; term=%d", c.currentTerm)
