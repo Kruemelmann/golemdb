@@ -14,14 +14,15 @@ var peerserverInstance *PeerServer
 var once sync.Once
 
 type PeerServer struct {
-	pb.UnimplementedPeersServiceServer
-	PeerStore *peerstore.PeerStore
+	grpcwrapper *grpcWrapper
+	PeerStore   *peerstore.PeerStore
 }
 
 func NewPeerServer() *PeerServer {
 	once.Do(func() {
 		peerserverInstance = &PeerServer{
-			PeerStore: peerstore.NewPeerStore(),
+			PeerStore:   peerstore.NewPeerStore(),
+			grpcwrapper: &grpcWrapper{},
 		}
 		//initialy fill the peerstore
 		peerserverInstance.InitialRegisterPeers()
@@ -32,6 +33,7 @@ func NewPeerServer() *PeerServer {
 func (a *PeerServer) InitialRegisterPeers() {
 	//FIXME remove debugging peers and read them from env or config file
 	a.PeerStore.Add("123", "127.0.0.1:9091")
+	a.PeerStore.Add("234", "127.0.0.1:9092")
 }
 
 func (a *PeerServer) Start() {
@@ -44,7 +46,7 @@ func (a *PeerServer) Start() {
 
 	log.Printf("Starting grpc service for peers\n")
 	grpcserver := grpc.NewServer()
-	pb.RegisterPeersServiceServer(grpcserver, &PeerServer{})
+	pb.RegisterPeersServiceServer(grpcserver, a.grpcwrapper)
 	grpcserver.Serve(lis)
 }
 
@@ -73,10 +75,25 @@ type RequestVoteReply struct {
 }
 
 //TODO this is only debugging
-func (a *PeerServer) RequestVote(id string, args RequestVoteArgs) (RequestVoteReply, error) {
+func (a *PeerServer) RequestVotes(id string, args RequestVoteArgs) (RequestVoteReply, error) {
 	reply := RequestVoteReply{
-		Term:        0,
+		Term:        args.Term,
 		VoteGranted: true,
+	}
+	return reply, nil
+}
+
+type AppendEntriesArgs struct {
+	Term     int
+	LeaderId string
+}
+type AppendEntriesReply struct {
+	Term int
+}
+
+func (a *PeerServer) AppendEntries(id string, args AppendEntriesArgs) (AppendEntriesReply, error) {
+	reply := AppendEntriesReply{
+		Term: args.Term,
 	}
 	return reply, nil
 }

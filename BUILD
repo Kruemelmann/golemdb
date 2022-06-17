@@ -22,4 +22,3 @@ container_image(
         "//cmd/golemdb:crosslinux_golemdb",
     ],
 )
-

@@ -89,14 +89,13 @@ func (c *ConsensusModule) startElection() {
 				CandidateId: c.ID,
 			}
 
-			log.Printf("HERE id=%v\n", ID)
-			reply, err := peerserver.NewPeerServer().RequestVote(ID, args)
+			reply, err := peerserver.NewPeerServer().RequestVotes(ID, args)
 			if err == nil {
 				c.mutex.Lock()
 				defer c.mutex.Unlock()
 				log.Printf("received RequestVoteReply term=%v bool=%v\n", reply.Term, reply.VoteGranted)
 
-				if c.state == State.Candidate {
+				if c.state != State.Candidate {
 					log.Printf("while waiting for reply, state = %v\n", c.state.String())
 					return
 				}
@@ -126,7 +125,7 @@ func (c *ConsensusModule) startLeader() {
 	c.state = State.Leader
 	log.Printf("becomes Leader; term=%d", c.currentTerm)
 	go func() {
-		ticker := time.NewTicker(50 * time.Millisecond)
+		ticker := time.NewTicker(10 * time.Millisecond)
 		defer ticker.Stop()
 		for {
 			c.leaderSendHeartbeats()
@@ -142,13 +141,38 @@ func (c *ConsensusModule) startLeader() {
 	}()
 }
 func (c *ConsensusModule) leaderSendHeartbeats() {
-	log.Printf("send Heardbeat\n")
+	c.mutex.Lock()
+	savedCurrentTerm := c.currentTerm
+	log.Printf("-> Term %d State %s", savedCurrentTerm, c.state.String())
+	c.mutex.Unlock()
+
+	ids, _ := peerserver.NewPeerServer().ListPeerIds()
+	for _, id := range ids {
+		args := peerserver.AppendEntriesArgs{
+			Term:     savedCurrentTerm,
+			LeaderId: c.ID,
+		}
+		go func(id string) {
+			reply, err := peerserver.NewPeerServer().AppendEntries(id, args)
+			if err != nil {
+				log.Printf("Error while AppendEntries Request on id %s\n", id)
+			}
+			c.mutex.Lock()
+			defer c.mutex.Unlock()
+			if reply.Term > savedCurrentTerm {
+				log.Printf("term out of date in heartbeat reply\n")
+				c.becomeFollower(reply.Term)
+				return
+			}
+		}(id)
+	}
 }
+
 func (c *ConsensusModule) becomeFollower(term int) {
 	log.Printf("becomes Leader; term=%d", c.currentTerm)
 	c.state = State.Follower
 	c.currentTerm = term
-	c.votedId = "-1"
+	c.votedId = ""
 	c.lastElectionReset = time.Now()
 
 	go c.startElectionTimer()

@@ -2,7 +2,10 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 
 go_library(
     name = "peerserver",
-    srcs = ["peerserver.go"],
+    srcs = [
+        "grpcwrapper.go",
+        "peerserver.go",
+    ],
     importpath = "github.com/kruemelmann/golemdb/pkg/peerserver",
     visibility = ["//visibility:public"],
     deps = [
