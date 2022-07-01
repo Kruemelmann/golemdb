@@ -64,36 +64,3 @@ func (a *PeerServer) ListPeerIds() ([]string, error) {
 
 	return ids, nil
 }
-
-type RequestVoteArgs struct {
-	Term        int
-	CandidateId string
-}
-type RequestVoteReply struct {
-	Term        int
-	VoteGranted bool
-}
-
-//TODO this is only debugging
-func (a *PeerServer) RequestVotes(id string, args RequestVoteArgs) (RequestVoteReply, error) {
-	reply := RequestVoteReply{
-		Term:        args.Term,
-		VoteGranted: true,
-	}
-	return reply, nil
-}
-
-type AppendEntriesArgs struct {
-	Term     int
-	LeaderId string
-}
-type AppendEntriesReply struct {
-	Term int
-}
-
-func (a *PeerServer) AppendEntries(id string, args AppendEntriesArgs) (AppendEntriesReply, error) {
-	reply := AppendEntriesReply{
-		Term: args.Term,
-	}
-	return reply, nil
-}

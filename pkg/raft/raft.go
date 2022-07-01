@@ -84,12 +84,12 @@ func (c *ConsensusModule) startElection() {
 	ids, _ := peerserver.NewPeerServer().ListPeerIds()
 	for _, id := range ids {
 		go func(ID string) {
-			args := peerserver.RequestVoteArgs{
+			args := RequestVoteArgs{
 				Term:        savedCurrentTerm,
 				CandidateId: c.ID,
 			}
 
-			reply, err := peerserver.NewPeerServer().RequestVotes(ID, args)
+			reply, err := RequestVotes(ID, args)
 			if err == nil {
 				c.mutex.Lock()
 				defer c.mutex.Unlock()
@@ -140,6 +140,7 @@ func (c *ConsensusModule) startLeader() {
 		}
 	}()
 }
+
 func (c *ConsensusModule) leaderSendHeartbeats() {
 	c.mutex.Lock()
 	savedCurrentTerm := c.currentTerm
@@ -148,12 +149,12 @@ func (c *ConsensusModule) leaderSendHeartbeats() {
 
 	ids, _ := peerserver.NewPeerServer().ListPeerIds()
 	for _, id := range ids {
-		args := peerserver.AppendEntriesArgs{
+		args := AppendEntriesArgs{
 			Term:     savedCurrentTerm,
 			LeaderId: c.ID,
 		}
 		go func(id string) {
-			reply, err := peerserver.NewPeerServer().AppendEntries(id, args)
+			reply, err := AppendEntries(id, args)
 			if err != nil {
 				log.Printf("Error while AppendEntries Request on id %s\n", id)
 			}
