@@ -1,0 +1,15 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "golemdbctl_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/kruemelmann/golemdb/cmd/golemdbctl",
+    visibility = ["//visibility:private"],
+    deps = ["//cmd/golemdbctl/command"],
+)
+
+go_binary(
+    name = "golemdbctl",
+    embed = [":golemdbctl_lib"],
+    visibility = ["//visibility:public"],
+)

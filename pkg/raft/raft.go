@@ -144,7 +144,7 @@ func (c *ConsensusModule) startLeader() {
 func (c *ConsensusModule) leaderSendHeartbeats() {
 	c.mutex.Lock()
 	savedCurrentTerm := c.currentTerm
-	log.Printf("-> Term %d State %s", savedCurrentTerm, c.state.String())
+	//log.Printf("-> Term %d State %s", savedCurrentTerm, c.state.String())
 	c.mutex.Unlock()
 
 	ids, _ := peerserver.NewPeerServer().ListPeerIds()

@@ -50,6 +50,13 @@ def go_dependencies():
         version = "v0.0.0-20211011173535-cb28da3451f1",
     )
     go_repository(
+        name = "com_github_cpuguy83_go_md2man_v2",
+        importpath = "github.com/cpuguy83/go-md2man/v2",
+        sum = "h1:p1EgwI/C7NhT0JmVkwCD2ZBK8j4aeHQX2pMHHBfMQ6w=",
+        version = "v2.0.2",
+    )
+
+    go_repository(
         name = "com_github_davecgh_go_spew",
         importpath = "github.com/davecgh/go-spew",
         sum = "h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=",
@@ -110,6 +117,13 @@ def go_dependencies():
         version = "v1.16.0",
     )
     go_repository(
+        name = "com_github_inconshreveable_mousetrap",
+        importpath = "github.com/inconshreveable/mousetrap",
+        sum = "h1:Z8tu5sraLXCXIcARxBp/8cbvlwVa7Z1NHg9XEKhtSvM=",
+        version = "v1.0.0",
+    )
+
+    go_repository(
         name = "com_github_pmezard_go_difflib",
         importpath = "github.com/pmezard/go-difflib",
         sum = "h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=",
@@ -127,6 +141,25 @@ def go_dependencies():
         sum = "h1:Ppwyp6VYCF1nvBTXL3trRso7mXMlRrw9ooo375wvi2s=",
         version = "v1.2.0",
     )
+    go_repository(
+        name = "com_github_russross_blackfriday_v2",
+        importpath = "github.com/russross/blackfriday/v2",
+        sum = "h1:JIOH55/0cWyOuilr9/qlrm0BSXldqnqwMsf35Ld67mk=",
+        version = "v2.1.0",
+    )
+    go_repository(
+        name = "com_github_spf13_cobra",
+        importpath = "github.com/spf13/cobra",
+        sum = "h1:X+jTBEBqF0bHN+9cSMgmfuvv2VHJ9ezmFNf9Y/XstYU=",
+        version = "v1.5.0",
+    )
+    go_repository(
+        name = "com_github_spf13_pflag",
+        importpath = "github.com/spf13/pflag",
+        sum = "h1:iy+VFUOCP1a+8yFto/drg2CJ5u0yRoB7fZw3DKv/JXA=",
+        version = "v1.0.5",
+    )
+
     go_repository(
         name = "com_github_stretchr_objx",
         importpath = "github.com/stretchr/objx",
@@ -154,8 +187,8 @@ def go_dependencies():
     go_repository(
         name = "in_gopkg_yaml_v2",
         importpath = "gopkg.in/yaml.v2",
-        sum = "h1:fvjTMHxHEw/mxHbtzPi3JCcKXQRAnQTBRo6YCJSVHKI=",
-        version = "v2.2.3",
+        sum = "h1:D8xgwECY7CYvx+Y2n4sBz93Jn9JRvxdiyyo8CTfuKaY=",
+        version = "v2.4.0",
     )
     go_repository(
         name = "in_gopkg_yaml_v3",

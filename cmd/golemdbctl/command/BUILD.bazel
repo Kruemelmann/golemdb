@@ -1,0 +1,13 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "command",
+    srcs = [
+        "get.go",
+        "put.go",
+        "root.go",
+    ],
+    importpath = "github.com/kruemelmann/golemdb/cmd/golemdbctl/command",
+    visibility = ["//visibility:public"],
+    deps = ["@com_github_spf13_cobra//:go_default_library"],
+)
