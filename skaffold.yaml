@@ -5,7 +5,8 @@ build:
   - image: golemdb-bazel
     bazel:
       target: //:golemdb.tar
+manifests:
+  rawYaml:
+    - deploy/k8s/k8s-*
 deploy:
-  kubectl:
-    manifests:
-    - deploy/k8s/k8s-pod.yaml
+  kubectl: {}
