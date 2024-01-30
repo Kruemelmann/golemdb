@@ -1,3 +1,5 @@
+<p align="center"><img src="https://raw.githubusercontent.com/kruemelmann/golemdb/main/docs/logo/logo.png" width="360"></p>
+
 # GolemDB
 
 Golem is a key-value store based on the consensus algorithm raft.
